@@ -1,0 +1,33 @@
+<hr>
+<div class="row justify-content-center">
+	<div class="col-6">
+		<% if @weather %>
+			<div class="card">
+				<div class="card-header">
+				    Current Weather in 
+            <span class="text-danger"><%= @weather["name"] %></span>
+				</div>
+				<div class="card-body">
+					<h5 class="card-title">Temperature:
+            <span class="text-danger"><%= @weather["main"]["temp"] %> °C</span>
+          </h5>
+					<p class="card-text">Feels Like:
+            <span class="text-danger"><%= @weather["main"]["feels_like"] %> °C</span>
+          </p>
+					<div class="row justify-content-center">
+						<div class="col-6">
+							<strong>Minimum:</strong>
+              <span class="text-danger"><%= @weather["main"]["temp_min"] %> °C</span>
+						</div>
+						<div class="col-6 text-end">
+							<strong>Maximum:</strong>
+              <span class="text-danger"><%= @weather["main"]["temp_max"] %> °C</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		<% elsif @error_message %>
+			<div class="alert alert-danger"><%= @error_message %></div>
+		<% end %>
+	</div>
+</div>
