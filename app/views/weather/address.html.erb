@@ -14,8 +14,6 @@
 	</div>
 <% end %>
 
-<% if @weather || @error_message %>
-  <%= render :partial => 'weather_card' %>
-<% elsif @forecast %>
-  <%= render :partial => 'forecast_table' %>
+<% if @error_message %>
+  <div class="alert alert-danger"><%= @error_message %></div>
 <% end %>
