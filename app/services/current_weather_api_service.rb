@@ -1,4 +1,4 @@
-class WeatherApiService
+class CurrentWeatherApiService
   def initialize(zip_code:, country_code:)
     @zip_code = zip_code
     @country_code = country_code
@@ -33,38 +33,5 @@ class WeatherApiService
     { error: "Request timed out. Please try again later." }
   rescue StandardError => e
     { error: "Unexpected error: #{e.message}" }
-  end
-
-  def fetch_extended_forecast(lat:, lon:)
-    forecast_resp = Faraday.get(WEATHER_API_ENDPOINTS[:forecast], {
-      lat: lat,
-      lon: lon,
-      units: "metric",
-      cnt: WEATHER_EXTENDED_FORECAST_DAYS,
-      appid: @api_key
-    })
-
-    return [] unless forecast_resp.success?
-
-    forecast_data = JSON.parse(forecast_resp.body)
-
-    forecast_table_data = forecast_data["list"].map do |entry|
-      {
-        date: Time.at(entry["dt"]).to_date,
-        temp: entry["main"]["temp"],
-        feels_like: entry["main"]["feels_like"],
-        min: entry["main"]["temp_min"],
-        max: entry["main"]["temp_max"]
-      }
-    end
-
-    city_data = forecast_data["city"]
-
-    return forecast_table_data, city_data
-  rescue Faraday::TimeoutError
-    { error: "Request timed out. Please try again later." }
-  rescue => e
-    Rails.logger.error("Extended forecast error: #{e.message}")
-    []
   end
 end

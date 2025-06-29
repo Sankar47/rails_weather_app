@@ -1,37 +1,41 @@
 <div class="row justify-content-center">
   <div class="col-6">
-    <div class="card">
-      <div class="card-header">
-          <%= WEATHER_EXTENDED_FORECAST_DAYS %>-Day Forecast in 
-          <span class="text-danger"><%= @city["name"] %></span>
-      </div>
-      <div class="card-body">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Temperature</th>
-              <th>Feels Like</th>
-              <th>Min</th>
-              <th>Max</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @forecast.each do |day| %>
+    <% if @forecast %>
+      <div class="card">
+        <div class="card-header">
+            <%= WEATHER_EXTENDED_FORECAST_DAYS %>-Day Forecast in
+            <span class="text-danger"><%= @city["name"] %></span>
+        </div>
+        <div class="card-body">
+          <table class="table">
+            <thead>
               <tr>
-                <td><%= day[:date] %></td>
-                <td><%= day[:temp] %>°C</td>
-                <td><%= day[:feels_like] %>°C</td>
-                <td><%= day[:min] %>°C</td>
-                <td><%= day[:max] %>°C</td>
+                <th>Date</th>
+                <th>Temperature</th>
+                <th>Feels Like</th>
+                <th>Min</th>
+                <th>Max</th>
               </tr>
-            <% end %>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              <% @forecast.each do |day| %>
+                <tr>
+                  <td><%= day[:date] %></td>
+                  <td><%= day[:temp] %>°C</td>
+                  <td><%= day[:feels_like] %>°C</td>
+                  <td><%= day[:min] %>°C</td>
+                  <td><%= day[:max] %>°C</td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-    <div class="jumbotron d-flex justify-content-end">
-      <%= link_to "Back to Address form", root_path(), class: "btn btn-secondary mt-3" %>
-    </div>
+      <div class="jumbotron d-flex justify-content-end">
+        <%= link_to "Back to Address form", root_path(), class: "btn btn-secondary mt-3" %>
+      </div>
+    <% elsif @error_message %>
+      <div class="alert alert-danger"><%= @error_message %></div>
+    <% end %>
   </div>
 </div>

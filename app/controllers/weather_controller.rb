@@ -12,7 +12,7 @@ class WeatherController < ApplicationController
     @zip_code = params[:zip_code]
     @country_code = params[:country_code]
 
-    result = WeatherApiService.new(
+    result = CurrentWeatherApiService.new(
       zip_code: @zip_code,
       country_code: @country_code
     ).fetch
@@ -27,10 +27,19 @@ class WeatherController < ApplicationController
   end
 
   def forecast
-    lat = params[:lat]
-    lon = params[:lon]
-    service = WeatherApiService.new(zip_code: "", country_code: "")
-    @forecast, @city = service.fetch_extended_forecast(lat: lat, lon: lon)
+    @lat = params[:lat]
+    @lon = params[:lon]
+
+    result = ExtendedForecastApiService.new(
+      lat: @lat,
+      lon: @lon
+    ).fetch
+
+    if result[:error]
+      @error_message = result[:error]
+    else
+      @forecast, @city = result[:forecast_data], result[:city_data]
+    end
 
     render :upcoming_forecast
   end
