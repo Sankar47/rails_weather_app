@@ -9,13 +9,11 @@ class WeatherController < ApplicationController
   end
 
   def search
-    @city = params[:city]
-    @state = params[:state]
+    @zip_code = params[:zip_code]
     @country_code = params[:country_code]
 
     result = WeatherApiService.new(
-      city: @city,
-      state: @state,
+      zip_code: @zip_code,
       country_code: @country_code
     ).fetch
 
@@ -31,7 +29,7 @@ class WeatherController < ApplicationController
   def forecast
     lat = params[:lat]
     lon = params[:lon]
-    service = WeatherApiService.new(city: "", state: "", country_code: "")
+    service = WeatherApiService.new(zip_code: "", country_code: "")
     @forecast, @city = service.fetch_extended_forecast(lat: lat, lon: lon)
 
     render :upcoming_forecast

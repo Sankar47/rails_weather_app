@@ -1,31 +1,25 @@
 class WeatherApiService
-  BASE_URL = "http://api.openweathermap.org/geo/1.0/direct"
-  WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather"
-  EXTENDED_URL = "https://api.openweathermap.org/data/2.5/forecast"
-
-  def initialize(city:, state:, country_code:)
-    @city = city
-    @state = state
+  def initialize(zip_code:, country_code:)
+    @zip_code = zip_code
     @country_code = country_code
     @api_key = Rails.application.credentials.dig(:openweather, :api_key)
   end
 
   def fetch
-    location_resp = Faraday.get(BASE_URL, {
-      q: "#{@city},#{@state},#{@country_code}",
-      limit: 1,
+    location_resp = Faraday.get(WEATHER_API_ENDPOINTS[:geocoding], {
+      zip: "#{@zip_code},#{@country_code}",
       appid: @api_key
     })
 
     return { error: "API error while fetching location." } unless location_resp.success?
 
     location_data = JSON.parse(location_resp.body)
-    return { error: "Location not found." } if location_data.empty?
+    return { error: "Location not found." } if location_data.blank?
 
-    lat = location_data.first["lat"]
-    lon = location_data.first["lon"]
+    lat = location_data["lat"]
+    lon = location_data["lon"]
 
-    weather_resp = Faraday.get(WEATHER_URL, {
+    weather_resp = Faraday.get(WEATHER_API_ENDPOINTS[:current_weather], {
       lat: lat,
       lon: lon,
       appid: @api_key,
@@ -35,16 +29,18 @@ class WeatherApiService
     return { error: "API error while fetching weather." } unless weather_resp.success?
 
     { weather: JSON.parse(weather_resp.body) }
+  rescue Faraday::TimeoutError
+    { error: "Request timed out. Please try again later." }
   rescue StandardError => e
     { error: "Unexpected error: #{e.message}" }
   end
 
   def fetch_extended_forecast(lat:, lon:)
-    forecast_resp = Faraday.get(EXTENDED_URL, {
+    forecast_resp = Faraday.get(WEATHER_API_ENDPOINTS[:forecast], {
       lat: lat,
       lon: lon,
       units: "metric",
-      cnt: 7,
+      cnt: WEATHER_EXTENDED_FORECAST_DAYS,
       appid: @api_key
     })
 
@@ -65,6 +61,8 @@ class WeatherApiService
     city_data = forecast_data["city"]
 
     return forecast_table_data, city_data
+  rescue Faraday::TimeoutError
+    { error: "Request timed out. Please try again later." }
   rescue => e
     Rails.logger.error("Extended forecast error: #{e.message}")
     []
