@@ -18,4 +18,8 @@
 	</div>
 <% end %>
 
-<%= render :partial => 'weather_card' %>
+<% if @weather || @error_message %>
+  <%= render :partial => 'weather_card' %>
+<% elsif @forecast %>
+  <%= render :partial => 'forecast_table' %>
+<% end %>
