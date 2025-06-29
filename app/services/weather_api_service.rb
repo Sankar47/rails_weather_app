@@ -6,7 +6,7 @@ class WeatherApiService
     @city = city
     @state = state
     @country_code = country_code
-    @api_key = "78e9455de9693c6ebd81e586fc7626e0"
+    @api_key = Rails.application.credentials.dig(:openweather, :api_key)
   end
 
   def fetch
