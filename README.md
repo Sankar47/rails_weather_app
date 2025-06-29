@@ -57,7 +57,16 @@ rails db:create
 rails db:migrate  
 rails db:seed  # optional, if seeds.rb is present
 
-### 6. Optional: Install Redis (for background jobs)
+### 6. Enable Caching (Recommended in Development)
+
+Run the following command to toggle Action Controller caching:
+
+rails dev:cache
+
+This will enable or disable caching by creating or removing the `tmp/caching-dev.txt` file.
+
+
+### 7. Optional: Install Redis (for background jobs)
 
 **macOS (Homebrew):**
 
@@ -70,7 +79,7 @@ sudo apt install redis-server
 sudo systemctl enable redis  
 sudo systemctl start redis
 
-### 7. Start the Rails Server
+### 8. Start the Rails Server
 
 bin/dev  # if using bin/dev with Foreman  
 # OR  

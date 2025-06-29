@@ -16,7 +16,10 @@ class WeatherController < ApplicationController
       service: CurrentWeatherApiService.new(zip_code: @zip_code, country_code: @country_code),
       render_view: :current_weather,
       current_action: :address,
-      success_block: ->(result) { @weather = result[:weather] }
+      success_block: ->(result) {
+        @weather = result[:weather]
+        @from_cache = result[:from_cache] || false
+      }
     )
   end
 
