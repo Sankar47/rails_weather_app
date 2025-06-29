@@ -1,37 +1,31 @@
-class CurrentWeatherApiService
+class CurrentWeatherApiService < BaseWeatherApiService
   def initialize(zip_code:, country_code:)
+    super()
     @zip_code = zip_code
     @country_code = country_code
-    @api_key = Rails.application.credentials.dig(:openweather, :api_key)
   end
 
   def fetch
-    location_resp = Faraday.get(WEATHER_API_ENDPOINTS[:geocoding], {
-      zip: "#{@zip_code},#{@country_code}",
-      appid: @api_key
-    })
-
-    return { error: "API error while fetching location." } unless location_resp.success?
-
-    location_data = JSON.parse(location_resp.body)
+    location_resp = get(
+      WEATHER_API_ENDPOINTS[:geocoding],
+      zip: "#{@zip_code},#{@country_code}"
+    )
+    location_data = handle_response(location_resp, error_message: "API error while fetching location.")
+    return location_data if location_data[:error]
     return { error: "Location not found." } if location_data.blank?
 
     lat = location_data["lat"]
     lon = location_data["lon"]
 
-    weather_resp = Faraday.get(WEATHER_API_ENDPOINTS[:current_weather], {
+    weather_resp = get(
+      WEATHER_API_ENDPOINTS[:current_weather],
       lat: lat,
       lon: lon,
-      appid: @api_key,
       units: "metric"
-    })
+    )
+    weather_data = handle_response(weather_resp, error_message: "API error while fetching weather.")
+    return weather_data if weather_data[:error]
 
-    return { error: "API error while fetching weather." } unless weather_resp.success?
-
-    { weather: JSON.parse(weather_resp.body) }
-  rescue Faraday::TimeoutError
-    { error: "Request timed out. Please try again later." }
-  rescue StandardError => e
-    { error: "Unexpected error: #{e.message}" }
+    { weather: weather_data }
   end
 end
