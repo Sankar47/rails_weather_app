@@ -1,5 +1,6 @@
 <h1 class="h2 mb-4">Weather Search</h1>
 
+<!-- Seach form with Zip code and Country code -->
 <%= form_with url: "/weather/search", method: :post, local: true, class: "row g-3 mb-3 align-items-end" do |form| %>
 	<div class="col-md-4">
 		<%= form.label :zip_code %>

@@ -8,6 +8,7 @@ class WeatherController < ApplicationController
   def upcoming_forecast
   end
 
+  # Current weather processing method
   def search
     @zip_code = params[:zip_code]
     @country_code = params[:country_code]
@@ -23,6 +24,7 @@ class WeatherController < ApplicationController
     )
   end
 
+  # Extended forecast processing method
   def forecast
     @lat = params[:lat]
     @lon = params[:lon]

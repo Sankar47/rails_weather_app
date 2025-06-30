@@ -5,6 +5,7 @@ class BaseWeatherApiService
 
   private
 
+  # Faraday GET API call
   def get(endpoint, params)
     Faraday.get(endpoint, params.merge(appid: @api_key))
   rescue Faraday::TimeoutError
@@ -13,6 +14,7 @@ class BaseWeatherApiService
     e
   end
 
+  # API Error Handling
   def handle_response(response, error_message:)
     return { error: "Request timed out. Please try again later." } if response == :timeout
     return { error: "Unexpected error: #{response.message}" } if response.is_a?(StandardError)

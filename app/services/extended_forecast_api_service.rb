@@ -5,11 +5,14 @@ class ExtendedForecastApiService < BaseWeatherApiService
     @lon = lon
   end
 
+  # Fetches extended forecast data for a given latitude and longitude.
   def fetch
+    # Extended Forecast API Call
     forecast_resp = get_extended_forecast
     forecast_data = handle_response(forecast_resp, error_message: "API error while fetching forecast.")
     return forecast_data if forecast_data[:error]
 
+    # Preparing table data for extended forecast
     build_forecast_data(forecast_data)
   end
 

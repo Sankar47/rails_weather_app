@@ -5,6 +5,7 @@ class CurrentWeatherApiService < BaseWeatherApiService
     @country_code = country_code
   end
 
+  # Fetches weather data for a given ZIP code, utilizing caching to reduce API calls.
   def fetch
     cache_key = "weather/#{@zip_code}"
     result = Rails.cache.read(cache_key)
@@ -14,6 +15,7 @@ class CurrentWeatherApiService < BaseWeatherApiService
       return result
     end
 
+    # GeoCoding API call
     location_resp = get_geocoding_data
     location_data = handle_response(location_resp, error_message: "Invalid Zip Code or Country Code.")
     return location_data if location_data[:error]
@@ -22,6 +24,7 @@ class CurrentWeatherApiService < BaseWeatherApiService
     @lat = location_data["lat"]
     @lon = location_data["lon"]
 
+    # Current Weather API Call
     weather_resp = get_weather_data
     weather_data = handle_response(weather_resp, error_message: "API error while fetching weather.")
     return weather_data if weather_data[:error]

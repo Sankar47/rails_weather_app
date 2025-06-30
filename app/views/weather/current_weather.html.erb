@@ -1,8 +1,11 @@
+<!-- Alert for cached result -->
 <% if @from_cache %>
   <div class="alert alert-info">
     This result is served from cache (last updated within 30 minutes).
   </div>
 <% end %>
+
+<!-- Weather info Card -->
 <div class="row justify-content-center">
 	<div class="col-6">
 		<% if @weather %>
@@ -33,6 +36,7 @@
 
       <div class="jumbotron d-flex justify-content-between">
         <%= link_to "Back to Address form", root_path(), class: "btn btn-secondary mt-3" %>
+        <!-- Extended forecast button -->
         <%= button_to "Show Extended Forecast", weather_forecast_path(
           lat: @weather["coord"]["lat"],
           lon: @weather["coord"]["lon"]
