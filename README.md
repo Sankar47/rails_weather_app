@@ -113,7 +113,7 @@ Additional tools:
 
 ---
 
-## Screenshots
+## 📷 Screenshots
 - **Empty Address**
 ![image](https://github.com/user-attachments/assets/ac22cb38-451f-434b-a875-0652b0036823)
 
@@ -128,6 +128,17 @@ Additional tools:
 
 -**Extended Forecast**
 ![image](https://github.com/user-attachments/assets/af866a38-23ca-4ed1-bdc3-7f641f8209c9)
+
+## 📄 Decomposition of API calls
+-**Geocoding API Call**
+![image](https://github.com/user-attachments/assets/13f98565-37b5-4156-9d72-7459de72150f)
+
+-**Current Weather API Call**
+![image](https://github.com/user-attachments/assets/53bf625c-1607-4cb3-bb03-5e312b37537a)
+
+-**Extended Weather API Call**
+![image](https://github.com/user-attachments/assets/6d6144f7-3598-4bc1-bbc6-a450f7062bf9)
+
 
 
 
